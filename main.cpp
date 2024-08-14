@@ -253,12 +253,17 @@ int main(void)
         return 1;
     }
 
-    printw("Press keys to play notes (q for C), and ESC to quit.\n");
+    printw("Press keys to play notes (q for C4), and ESC to quit.\n");
+    printw("==================================================\n");
+    printw("BLACK: S D   G H J   2 3   5 6 7   9 0\n");
+    printw("WHITE:Z X C V B N M Q W E R T Y U I O P\n");
+    printw("      C3            C4            C5\n");
+    printw("==================================================\n");
     refresh();
 
     int ch;
     while ((ch = getch()) != keymap["esc"]) {
-        printw("%d\n", ch);
+        // printw("%d\n", ch); // Enable this line for creating key mapping (key -> number).
         int index = indexmap[tonemap[ch]];
         data.framesLeft[index] = SOUND_DURATION_FRAMES; // Set duration for the corresponding note
     }

@@ -12,10 +12,10 @@
 
 typedef struct
 {
-    float frequencies[17];
-    float phases[17];
+    float frequencies[29];
+    float phases[29];
     float amplitude;
-    unsigned long framesLeft[17];
+    unsigned long framesLeft[29];
 } SineWaveData;
 
 int sineWaveCallback(const void *inputBuffer, void *outputBuffer,
@@ -31,7 +31,7 @@ int sineWaveCallback(const void *inputBuffer, void *outputBuffer,
     for (unsigned long i = 0; i < framesPerBuffer; i++) {
         float sample = 0.0;
 
-        for (int j = 0; j < 17; j++) {
+        for (int j = 0; j < 29; j++) {
             if (data->framesLeft[j] > 0) {
                 float volume = (float)data->framesLeft[j] / SOUND_DURATION_FRAMES; // Calculate fading volume
                 sample += volume * data->amplitude * sinf(2.0f * M_PI * data->phases[j]);
@@ -64,6 +64,7 @@ int main(void)
 {
      
     std::map<std::string, int> keymap;
+    // LINE 0
     keymap["esc"] = 27;
     keymap["0"] = 48;
     keymap["1"] = 49;
@@ -87,6 +88,16 @@ int main(void)
     keymap["o"] = 111;
     keymap["p"] = 112;
     // LINE 2
+    keymap["a"] = 97;
+    keymap["s"] = 115;
+    keymap["d"] = 100;
+    keymap["f"] = 102;
+    keymap["g"] = 103;
+    keymap["h"] = 104;
+    keymap["j"] = 106;
+    keymap["k"] = 107;
+    keymap["l"] = 108;
+    // LINE 3
     keymap["z"] = 122;
     keymap["x"] = 120;
     keymap["c"] = 99;
@@ -96,16 +107,17 @@ int main(void)
     keymap["m"] = 109;
 
     std::map<int, std::string> tonemap;
-    tonemap[keymap["1"]] = "C4";
-    tonemap[keymap["2"]] = "D4";
-    tonemap[keymap["3"]] = "E4";
-    tonemap[keymap["4"]] = "F4";
-    tonemap[keymap["5"]] = "G4";
-    tonemap[keymap["6"]] = "A4";
-    tonemap[keymap["7"]] = "B4";
-    tonemap[keymap["8"]] = "C5";
-    tonemap[keymap["9"]] = "D5";
-    tonemap[keymap["0"]] = "E5";
+    // LINE 0
+    // tonemap[keymap["1"]] = "C4";
+    tonemap[keymap["2"]] = "C#4";
+    tonemap[keymap["3"]] = "D#4";
+    // tonemap[keymap["4"]] = "F4";
+    tonemap[keymap["5"]] = "F#4";
+    tonemap[keymap["6"]] = "G#4";
+    tonemap[keymap["7"]] = "A#4";
+    // tonemap[keymap["8"]] = "C5";
+    tonemap[keymap["9"]] = "C#5";
+    tonemap[keymap["0"]] = "D#5";
     // LINE 1
     tonemap[keymap["q"]] = "C4";
     tonemap[keymap["w"]] = "D4";
@@ -118,6 +130,12 @@ int main(void)
     tonemap[keymap["o"]] = "D5";
     tonemap[keymap["p"]] = "E5";
     // LINE 2
+    tonemap[keymap["s"]] = "C#3";
+    tonemap[keymap["d"]] = "D#3";
+    tonemap[keymap["g"]] = "F#3";
+    tonemap[keymap["h"]] = "G#3";
+    tonemap[keymap["j"]] = "A#3";
+    // LINE 3
     tonemap[keymap["z"]] = "C3";
     tonemap[keymap["x"]] = "D3";
     tonemap[keymap["c"]] = "E3";
@@ -128,47 +146,73 @@ int main(void)
 
     std::map<std::string, int> indexmap;
     indexmap["C3"] = 0;
-    indexmap["D3"] = 1;
-    indexmap["E3"] = 2;
-    indexmap["F3"] = 3;
-    indexmap["G3"] = 4;
-    indexmap["A3"] = 5;
-    indexmap["B3"] = 6;
-    indexmap["C4"] = 7;
-    indexmap["D4"] = 8;
-    indexmap["E4"] = 9;
-    indexmap["F4"] = 10;
-    indexmap["G4"] = 11;
-    indexmap["A4"] = 12;
-    indexmap["B4"] = 13;
-    indexmap["C5"] = 14;
-    indexmap["D5"] = 15;
-    indexmap["E5"] = 16;
+    indexmap["C#3"] = 1;
+    indexmap["D3"] = 2;
+    indexmap["D#3"] = 3;
+    indexmap["E3"] = 4;
+    indexmap["F3"] = 5;
+    indexmap["F#3"] = 6;
+    indexmap["G3"] = 7;
+    indexmap["G#3"] = 8;
+    indexmap["A3"] = 9;
+    indexmap["A#3"] = 10;
+    indexmap["B3"] = 11;
+    indexmap["C4"] = 12;
+    indexmap["C#4"] = 13;
+    indexmap["D4"] = 14;
+    indexmap["D#4"] = 15;
+    indexmap["E4"] = 16;
+    indexmap["F4"] = 17;
+    indexmap["F#4"] = 18;
+    indexmap["G4"] = 19;
+    indexmap["G#4"] = 20;
+    indexmap["A4"] = 21;
+    indexmap["A#4"] = 22;
+    indexmap["B4"] = 23;
+    indexmap["C5"] = 24;
+    indexmap["C#5"] = 25;
+    indexmap["D5"] = 26;
+    indexmap["D#5"] = 27;
+    indexmap["E5"] = 28;
 
    
     PaError err;
     SineWaveData data;
     
+    // Frequencies of the sound (Hz).
+    float ra = 1.05946;
     data.frequencies[indexmap["C3"]] = 130.82;
+    data.frequencies[indexmap["C#3"]] = 130.82 * ra;
     data.frequencies[indexmap["D3"]] = 146.83;
+    data.frequencies[indexmap["D#3"]] = 146.83 * ra;
     data.frequencies[indexmap["E3"]] = 164.82;
     data.frequencies[indexmap["F3"]] = 174.62;
+    data.frequencies[indexmap["F#3"]] = 174.62 * ra;
     data.frequencies[indexmap["G3"]] = 196.00;
+    data.frequencies[indexmap["G#3"]] = 196.00 * ra;
     data.frequencies[indexmap["A3"]] = 220.00;
+    data.frequencies[indexmap["A#3"]] = 220.00 * ra;
     data.frequencies[indexmap["B3"]] = 246.94;
     data.frequencies[indexmap["C4"]] = 261.63;
+    data.frequencies[indexmap["C#4"]] = 261.63 * ra;
     data.frequencies[indexmap["D4"]] = 293.66;
+    data.frequencies[indexmap["D#4"]] = 293.66 * ra;
     data.frequencies[indexmap["E4"]] = 329.63;
     data.frequencies[indexmap["F4"]] = 349.23;
+    data.frequencies[indexmap["F#4"]] = 349.23 * ra;
     data.frequencies[indexmap["G4"]] = 392.00;
+    data.frequencies[indexmap["G#4"]] = 392.00 * ra;
     data.frequencies[indexmap["A4"]] = 440.00;
+    data.frequencies[indexmap["A#4"]] = 440.00 * ra;
     data.frequencies[indexmap["B4"]] = 493.88;
     data.frequencies[indexmap["C5"]] = 523.25;
+    data.frequencies[indexmap["C#5"]] = 523.25 * ra;
     data.frequencies[indexmap["D5"]] = 587.33;
+    data.frequencies[indexmap["D#5"]] = 587.33 * ra;
     data.frequencies[indexmap["E5"]] = 659.26;
 
 
-    for (int i = 0; i < 17; i++) {
+    for (int i = 0; i < 29; i++) {
         data.phases[i] = 0.0;
         data.framesLeft[i] = 0;
     }
